@@ -1,1 +1,3 @@
-"# DeFi Staking Dapp" 
+# DeFi Staking Dapp
+
+#### React, Solidity, Mocha, Truffle, Ganache
