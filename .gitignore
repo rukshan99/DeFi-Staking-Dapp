@@ -412,3 +412,6 @@ testeth
 node_modules
 bin_output
 logs
+
+# truffle compiled jsons
+truffle_abis/
