@@ -35,6 +35,14 @@ contract Tether {
         return true;
     }
 
+    function approve(address _spender, uint _value) public returns (bool success) {
+        allowance[msg.sender][_spender] = _value;
+        emit Approve(msg.sender, _spender, _value);
+
+        return true;
+    }
+
+    // For third-party transfers
     function transferFrom(address _from, address _to, uint _value) public returns (bool success) {
         require(_value <= balanceOf[_from]);
         require(_value <= allowance[_from][msg.sender]);
