@@ -9,7 +9,7 @@ module.exports = async function(deployer, network, accounts) {
     await deployer.deploy(Reward);
     const reward = await Reward.deployed();
 
-    await deployer.deploy(DecentralBank);
+    await deployer.deploy(DecentralBank, reward.address, tether.address);
     const decentralBank = await DecentralBank.deployed();
 
     await reward.transfer(decentralBank.address, '1000000000000000000000000');
