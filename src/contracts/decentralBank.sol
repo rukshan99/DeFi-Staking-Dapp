@@ -35,5 +35,12 @@ contract DecentralBank {
 
     function issueTokens() public {
         require(msg.sender == owner, "Caller must be the owner");
+        for(uint i=0; i<stakers.length; i++) {
+            address recipient = stakers[i];
+            uint balance = stakingBalance[recipient];
+            if(balance > 0) {
+                reward.transfer(recipient, balance/10); // 10% reward tokens from the total amount of staking will be issued
+            }
+        }
     }
 }
