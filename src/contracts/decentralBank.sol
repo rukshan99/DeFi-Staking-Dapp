@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.0;
 
-import './reward.sol';
-import './tether.sol';
+import "./reward.sol";
+import "./tether.sol";
 
 contract DecentralBank {
-    string public name = 'Decentral Bank';
+    string public name = "Decentral Bank";
     address public owner;
     Tether public tether;
     Reward public reward;
 
     address[] public stakers;
 
-    mapping(address => uint) public stakingBalance;
+    mapping(address => uint256) public stakingBalance;
     mapping(address => bool) public hasStaked;
     mapping(address => bool) public isStaking;
 
@@ -21,15 +21,19 @@ contract DecentralBank {
         tether = _tether;
     }
 
-    function depositTokens(uint _amount) public {
+    function depositTokens(uint256 _amount) public {
         tether.transferFrom(msg.sender, address(this), _amount);
         stakingBalance[msg.sender] += _amount;
 
-        if(!hasStaked[msg.sender]) {
+        if (!hasStaked[msg.sender]) {
             stakers.push(msg.sender);
             hasStaked[msg.sender] = true;
         }
 
         isStaking[msg.sender] = true;
+    }
+
+    function issueTokens() public {
+        require(msg.sender == owner, "Caller must be the owner");
     }
 }
