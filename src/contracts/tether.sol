@@ -57,7 +57,7 @@ contract Tether {
     }
 
     // Helper functions
-    function stringToUint(string memory s) public returns (uint result) {
+    function stringToUint(string memory s) public pure returns (uint result) {
         bytes memory b = bytes(s);
         uint i;
         result = 0;
