@@ -24,7 +24,7 @@ contract('DecentralBank', ([owner, customer]) => { // owner = accounts[0]   cust
         await reward.transfer(decentralBank.address, toWei('1000000'));
 
         // Transfering 100 mTether to customer
-        await tether.transfer(customer, toWei('100'), {from: owner});
+        await tether.transfer(customer, toWei('100'), { from: owner });
     });
 
     describe('mTether Deployment', async () => {
@@ -52,4 +52,30 @@ contract('DecentralBank', ([owner, customer]) => { // owner = accounts[0]   cust
             assert.equal(balance, toWei('1000000'));
         });
     });
+
+    describe('Yield Farming', async () => {
+        it('rewards tokens for staking', async () => {
+            let result
+
+            // Check investor balance
+            result = await tether.balanceOf(customer)
+            assert.equal(result.toString(), toWei('100'), 'customer mock tether balance before staking')
+
+            // Check Staking for Customer of 100 tokens
+            await tether.approve(decentralBank.address, toWei('100'), { from: customer })
+            await decentralBank.depositTokens(toWei('100'), { from: customer })
+
+            // Check updated balance of Customer and make sure its 0 after staking 100 tokens--ERROR START
+            result = await tether.balanceOf(customer)
+            assert.equal(result.toString(), toWei('0'), 'Customer mock wallet balance after staking 100 tokens')
+
+            // Check updated balance of decentral bank
+            result = await tether.balanceOf(decentralBank.address)
+            assert.equal(result.toString(), toWei('100'), 'Decentral Bank wallet balance after staking from customer')
+
+            // Is staking update
+            result = await decentralBank.isStaking[customer]
+            assert.equal(result.toString(), 'true', 'Customer is staking status after staking to be true')
+        })
+    })
 });

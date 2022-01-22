@@ -35,9 +35,10 @@ contract Tether {
         return true;
     }
 
-    function approve(address _spender, uint _value) public returns (bool success) {
-        allowance[msg.sender][_spender] = _value;
-        emit Approve(msg.sender, _spender, _value);
+    function approve(address _spender, string memory _value) public returns (bool success) {
+        uint value = stringToUint(_value);
+        allowance[msg.sender][_spender] = value;
+        emit Approve(msg.sender, _spender, value);
 
         return true;
     }
@@ -53,5 +54,18 @@ contract Tether {
         emit Transfer(_from, _to, _value);
 
         return true;
+    }
+
+    // Helper functions
+    function stringToUint(string memory s) public returns (uint result) {
+        bytes memory b = bytes(s);
+        uint i;
+        result = 0;
+        for (i = 0; i < b.length; i++) {
+            uint c = uint(uint8(b[i]));
+            if (c >= 48 && c <= 57) {
+                result = result * 10 + (c - 48);
+            }
+        }
     }
 }
