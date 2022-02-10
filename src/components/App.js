@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import web3 from 'web3';
+
+import Tether from '../truffle_abis/Tether.json';
 import Navbar from './Navbar';
 import './App.css';
 
@@ -8,7 +10,14 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            account: '0x023e333ca3'
+            account: '0x023e333ca3',
+            tether: {},
+            reward: {},
+            decentralBank: {},
+            tetherBalance: '0',
+            rewardBalance: '0',
+            stakingBalance: '0',
+            isLoading: true
         }
     }
 
@@ -30,9 +39,24 @@ class App extends Component {
 
     async loadBlockchainData() {
         const web3 = window.web3;
-        const account = await web3.eth.getAccounts();
+        const accounts = await web3.eth.getAccounts() || [];
+        const networkID = await web3.eth.net.getId();
+
+        // Load Tether contract
+        const tetherData = Tether.networks[networkID];
+        let tether = {};
+        let tetherBalance = 0;
+        if(tetherData) {
+            tether = {... new web3.eth.Contract(Tether.abi, tetherData.address)};
+            tetherBalance = await tether.methods.balanceOf(this.state.account).call();
+        } else {
+            window.alert('ERROR: no there contract detected.');
+        }
+
         this.setState({
-            account: account[0]
+            account: accounts[0],
+            tether,
+            tetherBalance: tetherBalance.toString()
         });
     }
 
