@@ -3,7 +3,7 @@ import web3 from 'web3';
 
 import Tether from '../truffle_abis/Tether.json';
 import Reward from '../truffle_abis/Reward.json';
-import decentralBank from '../truffle_abis/DecentralBank.json';
+import DecentralBank from '../truffle_abis/DecentralBank.json';
 import Navbar from './Navbar';
 import './App.css';
 
@@ -35,7 +35,7 @@ class App extends Component {
         } else if(window.web3) {
             window.web3 = new web3(window.web3.currentProvider);
         } else {
-            winsow.alert('No Ethereum (ETH) browser detected. Check Metamask!');
+            window.alert('No Ethereum (ETH) browser detected. Check Metamask!');
         }
     }
 
