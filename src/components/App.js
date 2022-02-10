@@ -39,7 +39,7 @@ class App extends Component {
 
     async loadBlockchainData() {
         const web3 = window.web3;
-        const accounts = await web3.eth.getAccounts() || [];
+        const accounts = await web3.eth.getAccounts();
         const networkID = await web3.eth.net.getId();
 
         // Load Tether contract
@@ -54,7 +54,7 @@ class App extends Component {
         }
 
         this.setState({
-            account: accounts[0],
+            account: accounts[0] || '0x023e333ca3',
             tether,
             tetherBalance: tetherBalance.toString()
         });
