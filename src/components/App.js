@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import web3 from 'web3';
 
 import Tether from '../truffle_abis/Tether.json';
+import Reward from '../truffle_abis/Reward.json';
+import decentralBank from '../truffle_abis/DecentralBank.json';
 import Navbar from './Navbar';
 import './App.css';
 
@@ -50,13 +52,39 @@ class App extends Component {
             tether = {... new web3.eth.Contract(Tether.abi, tetherData.address)};
             tetherBalance = await tether.methods.balanceOf(this.state.account).call();
         } else {
-            window.alert('ERROR: no there contract detected.');
+            window.alert('ERROR: no Tether(mUSDT) contract detected.');
+        }
+
+        // Load Reward contract
+        const rewardData = Reward.networks[networkID];
+        let reward = {};
+        let rewardBalance = 0;
+        if(rewardData) {
+            reward = {... new web3.eth.Contract(Reward.abi, rewardData.address)};
+            rewardBalance = await reward.methods.balanceOf(this.state.account).call();
+        } else {
+            window.alert('ERROR: no Reward(RWD) contract detected.');
+        }
+
+        // Load DecentralBank contract
+        const decentralBankData = Reward.networks[networkID];
+        let decentralBank = {};
+        let stakingBalance = 0;
+        if(decentralBankData) {
+            decentralBank = {... new web3.eth.Contract(DecentralBank.abi, decentralBankData.address)};
+            stakingBalance = await decentralBank.methods.stakingBalance(this.state.account).call();
+        } else {
+            window.alert('ERROR: no DecentralBank contract detected.');
         }
 
         this.setState({
             account: accounts[0] || '0x023e333ca3',
             tether,
-            tetherBalance: tetherBalance.toString()
+            reward,
+            decentralBank,
+            tetherBalance: tetherBalance.toString(),
+            rewardBalance: rewardBalance.toString(),
+            stakingBalance: stakingBalance.toString()
         });
     }
 
