@@ -14,6 +14,7 @@ class App extends Component {
 
     async UNSAFE_componentWillMount() {
         await this.loadWeb3();
+        await this.loadBlockchainData();
     }
 
     async loadWeb3() {
@@ -25,6 +26,14 @@ class App extends Component {
         } else {
             winsow.alert('No Ethereum (ETH) browser detected. Check Metamask!');
         }
+    }
+
+    async loadBlockchainData() {
+        const web3 = window.web3;
+        const account = await web3.eth.getAccounts();
+        this.setState({
+            account: account[0]
+        });
     }
 
     render() {
