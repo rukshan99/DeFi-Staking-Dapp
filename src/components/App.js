@@ -5,6 +5,7 @@ import Tether from '../truffle_abis/Tether.json';
 import Reward from '../truffle_abis/Reward.json';
 import DecentralBank from '../truffle_abis/DecentralBank.json';
 import Navbar from './Navbar';
+import Main from './Main';
 import './App.css';
 
 class App extends Component {
@@ -93,6 +94,15 @@ class App extends Component {
         return (
             <div>
                 <Navbar account={this.state.account} />
+                <div className='container-fluid mt-5'>
+                    <div className='row'>
+                        <main role='main' className='col-lg-12 ml-auto mr-auto' style={{maxWidth:'600px', minHeight='100vm'}}>
+                            <div>
+                                <Main />
+                            </div>
+                        </main>
+                    </div>
+                </div>
             </div>
         )
     }
