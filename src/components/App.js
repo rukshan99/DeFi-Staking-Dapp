@@ -91,6 +91,7 @@ class App extends Component {
     }
 
     render() {
+        const content = this.state.isLoading ? <p id='loader' className='text-center' style={{margin:'30px'}}>LOADING...</p> : <Main />;
         return (
             <div>
                 <Navbar account={this.state.account} />
@@ -98,7 +99,7 @@ class App extends Component {
                     <div className='row'>
                         <main role='main' className='col-lg-12 ml-auto mr-auto' style={{maxWidth:'600px', minHeight='100vm'}}>
                             <div>
-                                <Main />
+                                {content}
                             </div>
                         </main>
                     </div>
