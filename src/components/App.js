@@ -30,10 +30,10 @@ class App extends Component {
     }
 
     async loadWeb3() {
-        if(window.ethereum) {
+        if (window.ethereum) {
             window.web3 = new web3(window.ethereum);
             await window.ethereum.enable();
-        } else if(window.web3) {
+        } else if (window.web3) {
             window.web3 = new web3(window.web3.currentProvider);
         } else {
             window.alert('No Ethereum (ETH) browser detected. Check Metamask!');
@@ -50,8 +50,8 @@ class App extends Component {
         const tetherData = Tether.networks[networkID];
         let tether = {};
         let tetherBalance = 0;
-        if(tetherData) {
-            tether = {...new web3.eth.Contract(Tether.abi, tetherData.address)};
+        if (tetherData) {
+            tether = { ...new web3.eth.Contract(Tether.abi, tetherData.address) };
             tetherBalance = await tether.methods.balanceOf(this.state.account).call();
         } else {
             window.alert('ERROR: no Tether(mUSDT) contract detected.');
@@ -61,8 +61,8 @@ class App extends Component {
         const rewardData = Reward.networks[networkID];
         let reward = {};
         let rewardBalance = 0;
-        if(rewardData) {
-            reward = {...new web3.eth.Contract(Reward.abi, rewardData.address)};
+        if (rewardData) {
+            reward = { ...new web3.eth.Contract(Reward.abi, rewardData.address) };
             rewardBalance = await reward.methods.balanceOf(this.state.account).call();
         } else {
             window.alert('ERROR: no Reward(RWD) contract detected.');
@@ -72,8 +72,8 @@ class App extends Component {
         const decentralBankData = Reward.networks[networkID];
         let decentralBank = {};
         let stakingBalance = 0;
-        if(decentralBankData) {
-            decentralBank = {...new web3.eth.Contract(DecentralBank.abi, decentralBankData.address)};
+        if (decentralBankData) {
+            decentralBank = { ...new web3.eth.Contract(DecentralBank.abi, decentralBankData.address) };
             stakingBalance = await decentralBank.methods.stakingBalance(this.state.account).call();
         } else {
             window.alert('ERROR: no DecentralBank contract detected.');
@@ -91,13 +91,19 @@ class App extends Component {
     }
 
     render() {
-        const content = this.state.isLoading ? <p id='loader' className='text-center' style={{margin:'30px'}}>LOADING...</p> : <Main />;
+        const content = this.state.isLoading ?
+            <p id='loader' className='text-center' style={{ margin: '30px' }}>LOADING...</p> :
+            <Main
+                tetherBalance={this.state.tetherBalance}
+                rewardBalance={this.state.rewardBalance}
+                stakingBalance={this.state.stakingBalance}
+            />;
         return (
             <div>
                 <Navbar account={this.state.account} />
                 <div className='container-fluid mt-5'>
                     <div className='row'>
-                        <main role='main' className='col-lg-12 ml-auto mr-auto' style={{maxWidth:'600px', minHeight='100vm'}}>
+                        <main role='main' className='col-lg-12 ml-auto mr-auto' style={{ maxWidth: '600px', minHeight='100vm' }}>
                             <div>
                                 {content}
                             </div>
