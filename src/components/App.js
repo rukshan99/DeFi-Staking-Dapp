@@ -90,6 +90,22 @@ class App extends Component {
         });
     }
 
+    // Methods to handle staking and unstaking
+    stakeTokens = (amount) => {
+        this.setState({isLoading: true});
+        this.state.tether.methods
+            .approve(this.state.decentralBank._address,amount)
+            .send({ from:  this.state.account})
+            .on('transactionHash', (hash) => {
+                this.state.decentralBank.methods
+                    .depositTokens(amount)
+                    .send({ from: this.state.account })
+                    .on('transactionHash', (hash) => {
+                        this.setState({isLoading: false});
+                    }); 
+            });
+    }
+
     render() {
         const content = this.state.isLoading ?
             <p id='loader' className='text-center' style={{ margin: '30px' }}>LOADING...</p> :
@@ -97,6 +113,7 @@ class App extends Component {
                 tetherBalance={this.state.tetherBalance}
                 rewardBalance={this.state.rewardBalance}
                 stakingBalance={this.state.stakingBalance}
+                stakeTokens={this.stakeTokens}
             />;
         return (
             <div>
