@@ -92,18 +92,32 @@ class App extends Component {
 
     // Methods to handle staking and unstaking
     stakeTokens = (amount) => {
-        this.setState({isLoading: true});
+        this.setState({ isLoading: true });
         this.state.tether.methods
-            .approve(this.state.decentralBank._address,amount)
-            .send({ from:  this.state.account})
+            .approve(this.state.decentralBank._address, amount)
+            .send({ from: this.state.account })
             .on('transactionHash', (hash) => {
                 this.state.decentralBank.methods
                     .depositTokens(amount)
                     .send({ from: this.state.account })
                     .on('transactionHash', (hash) => {
-                        this.setState({isLoading: false});
-                    }); 
+                        this.setState({ isLoading: false });
+                    });
             });
+    }
+
+    unstakeTokens = () => {
+        if (this.state.stakingBalance > 0) {
+            this.setState({ isLoading: true });
+            this.state.decentralBank.methods
+                .unstakeTokens()
+                .send({ from: this.state.account })
+                .on('transactionHash', (hash) => {
+                    this.setState({ isLoading: false });
+                });
+        } else {
+            window.alert('Not enough staking balance.');
+        }
     }
 
     render() {
@@ -114,6 +128,7 @@ class App extends Component {
                 rewardBalance={this.state.rewardBalance}
                 stakingBalance={this.state.stakingBalance}
                 stakeTokens={this.stakeTokens}
+                unstakeTokens={this.unstakeTokens}
             />;
         return (
             <div>
